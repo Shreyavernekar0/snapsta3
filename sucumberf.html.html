@@ -36,7 +36,7 @@
             border-radius: 5px;
             border: none;
             margin: 10px;
-            width: 200px;
+            width: 200px; /* This keeps the input width as it is */
             text-align: center;
         }
         #welcome-screen button {
@@ -52,9 +52,9 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr); /* Two buttons per row */
             grid-template-rows: auto;
-            gap: 30px;
+            gap: 20px; /* Reduced gap for smaller buttons */
             justify-content: center;
-            padding: 40px;
+            padding: 20px;
         }
         .center {
             grid-column: 1 / span 2; /* Make the third button span across two columns */
@@ -62,8 +62,8 @@
         }
         .game-button {
             position: relative;
-            width: 350px;
-            height: 200px;
+            width: 150px; /* Smaller width */
+            height: 100px; /* Smaller height */
             margin: 0 auto;
             border: none;
             cursor: pointer;
@@ -79,13 +79,13 @@
         }
         .game-button span {
             position: absolute;
-            bottom: 10px;
+            bottom: 5px; /* Adjusted for smaller size */
             left: 0;
             right: 0;
             color: white;
-            font-size: 1.5em;
+            font-size: 0.9em; /* Smaller font size */
             background-color: rgba(0, 0, 0, 0.6);
-            padding: 5px 0;
+            padding: 3px 0;
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
         }
@@ -116,27 +116,27 @@
 
         <div class="game-container">
             <!-- Game 1: Hello Kitty -->
-            <a href="https://rejoiceingames.github.io/snapsta3/hello kitty.html" class="game-button" style="background-image: url('https://i.ytimg.com/vi/1Ad-ZNgXkKk/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgQShPMA8=&rs=AOn4CLAhPtxL4MWfRXe0fQ_qICa1uCR-Bw');">
+            <a href="https://rejoiceingames.github.io/snapsta3/puzzleD.html" class="game-button" style="background-image: url('https://i.ytimg.com/vi/1Ad-ZNgXkKk/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgQShPMA8=&rs=AOn4CLAhPtxL4MWfRXe0fQ_qICa1uCR-Bw');">
                 <span>Hello Kitty</span>
             </a>
 
             <!-- Game 2: Angry Birds -->
-            <a href="https://rejoiceingames.github.io/snapsta3/angrybird.html" class="game-button" style="background-image: url('https://c.files.bbci.co.uk/9CC0/production/_129382104_capture.jpg');">
+            <a href="https://rejoiceingames.github.io/snapsta3/puzzleA.html" class="game-button" style="background-image: url('https://c.files.bbci.co.uk/9CC0/production/_129382104_capture.jpg');">
                 <span>Angry Birds</span>
             </a>
 
             <!-- Game 3: Spider-Man (centered) -->
-            <a href="https://rejoiceingames.github.io/snapsta3/spider.html" class="game-button center" style="background-image: url('https://preview.redd.it/u55el6zy6f691.jpg?auto=webp&s=9e2f9315b69b270a8d0d52302caea1f6f061b789');">
+            <a href="https://rejoiceingames.github.io/snapsta3/puzzleS.html" class="game-button center" style="background-image: url('https://preview.redd.it/u55el6zy6f691.jpg?auto=webp&s=9e2f9315b69b270a8d0d52302caea1f6f061b789');">
                 <span>Spider-Man</span>
             </a>
 
             <!-- Game 4: Tom and Jerry -->
-            <a href="https://rejoiceingames.github.io/snapsta3/tom.html" class="game-button" style="background-image: url('https://preview.redd.it/tom-jerry-feedback-and-testing-appreciated-v0-tyxv7vw451tc1.png?width=640&crop=smart&auto=webp&s=4026168201e5e0da75ea46f5abbd5008361776cf');">
+            <a href="https://rejoiceingames.github.io/snapsta3/puzzleT.html" class="game-button" style="background-image: url('https://preview.redd.it/tom-jerry-feedback-and-testing-appreciated-v0-tyxv7vw451tc1.png?width=640&crop=smart&auto=webp&s=4026168201e5e0da75ea46f5abbd5008361776cf');">
                 <span>Tom and Jerry</span>
             </a>
 
             <!-- Game 5: Doraemon -->
-            <a href="https://rejoiceingames.github.io/snapsta3/doramon.html" class="game-button" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzDx-QOKawjZyesKvxQksW9jZAvcQ0_LfYLg&s');">
+            <a href="https://rejoiceingames.github.io/snapsta3/puzzleH.html" class="game-button" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzDx-QOKawjZyesKvxQksW9jZAvcQ0_LfYLg&s');">
                 <span>Doraemon</span>
             </a>
         </div>
