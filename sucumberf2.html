@@ -36,7 +36,7 @@
             border-radius: 5px;
             border: none;
             margin: 10px;
-            width: 200px;
+            width: 200px; /* This keeps the input width as it is */
             text-align: center;
         }
         #welcome-screen button {
@@ -52,9 +52,9 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr); /* Two buttons per row */
             grid-template-rows: auto;
-            gap: 30px;
+            gap: 20px; /* Reduced gap for smaller buttons */
             justify-content: center;
-            padding: 40px;
+            padding: 20px;
         }
         .center {
             grid-column: 1 / span 2; /* Make the third button span across two columns */
@@ -62,8 +62,8 @@
         }
         .game-button {
             position: relative;
-            width: 350px;
-            height: 200px;
+            width: 150px; /* Smaller width */
+            height: 100px; /* Smaller height */
             margin: 0 auto;
             border: none;
             cursor: pointer;
@@ -79,13 +79,13 @@
         }
         .game-button span {
             position: absolute;
-            bottom: 10px;
+            bottom: 5px; /* Adjusted for smaller size */
             left: 0;
             right: 0;
             color: white;
-            font-size: 1.5em;
+            font-size: 0.9em; /* Smaller font size */
             background-color: rgba(0, 0, 0, 0.6);
-            padding: 5px 0;
+            padding: 3px 0;
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
         }
