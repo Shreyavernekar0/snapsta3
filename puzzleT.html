@@ -10,7 +10,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-image: url('https://c4.wallpaperflare.com/wallpaper/542/844/960/cat-mustache-minimalism-tom-and-jerry-wallpaper-preview.jpg'); /* Replace with your background image URL */
+      background-image: url('https://c4.wallpaperflare.com/wallpaper/542/844/960/cat-mustache-minimalism-tom-and-jerry-wallpaper-preview.jpg');
       background-size: cover;
       background-position: center;
       font-family: Arial, sans-serif;
@@ -19,14 +19,14 @@
     }
 
     #game-container {
-      width: 400px;
-      height: 400px;
+      width: 300px;
+      height: 300px;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
       gap: 2px;
       border: 5px solid #4682b4;
-      background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+      background-color: rgba(255, 255, 255, 0.8);
       border-radius: 15px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     }
@@ -34,7 +34,7 @@
     .tile {
       width: 100%;
       height: 100%;
-      background-size: 400px 400px;
+      background-size: 300px 300px;
       border: 1px solid #cccccc;
       cursor: grab;
     }
@@ -58,7 +58,6 @@
       margin-bottom: 20px;
     }
 
-    /* Style the restart button */
     #restart-btn {
       padding: 12px 25px;
       font-size: 18px;
@@ -74,47 +73,41 @@
       background-color: #5a9bd6;
       transform: scale(1.1);
     }
-
   </style>
 </head>
 <body>
   <div id="game-container"></div>
   <div id="game-over">
     <h1>Congratulations! You solved the puzzle!</h1>
-        <button id="restart-btn">Play Again</button>
+    <button id="restart-btn">Play Again</button>
   </div>
 
   <script>
     const gameContainer = document.getElementById("game-container");
     const gameOverScreen = document.getElementById("game-over");
     const restartBtn = document.getElementById("restart-btn");
-    const finalScore = document.getElementById("final-score");
 
     const imageUrls = [
-      "https://images.firstpost.com/uploads/2023/02/tomandherry.jpg?im=FitAndFill=(596,336)",
+       "https://images.firstpost.com/uploads/2023/02/tomandherry.jpg?im=FitAndFill=(596,336)",
       "https://i.redd.it/alh5mkc5tye91.jpg",
       "https://static.vecteezy.com/system/resources/previews/022/024/202/non_2x/tom-and-jerry-cartoon-free-vector.jpg",
       "https://i.pinimg.com/236x/6d/bf/1d/6dbf1d225cde22a9da3846504adca0bd.jpg",
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVoIzef_DRlimohTRLunAevFyqvToe9x-9_wjugHm3dX3dIRrHwexw4Mf5rdGFFEjJ96U&usqp=CAU"
+
+
+
     ];
 
     const gridSize = 3;
     let tiles = [];
     let shuffledTiles = [];
     let imageUrl = "";
-    let score = 0;
-
-    function updateScore(amount) {
-      score += amount;
-    }
 
     function initGame() {
       imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
-
       tiles = [];
       gameContainer.innerHTML = "";
 
-      // Create tiles with puzzle pieces
       for (let row = 0; row < gridSize; row++) {
         for (let col = 0; col < gridSize; col++) {
           const tile = document.createElement("div");
@@ -125,7 +118,6 @@
           tile.dataset.currentIndex = row * gridSize + col;
           tile.draggable = true;
 
-          // Add drag-and-drop functionality
           tile.addEventListener("dragstart", handleDragStart);
           tile.addEventListener("dragover", handleDragOver);
           tile.addEventListener("drop", handleDrop);
@@ -141,7 +133,6 @@
     }
 
     function shuffleTiles() {
-      // Shuffle tiles
       for (let i = shuffledTiles.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffledTiles[i], shuffledTiles[j]] = [shuffledTiles[j], shuffledTiles[i]];
@@ -165,7 +156,7 @@
     }
 
     function handleDragOver(event) {
-      event.preventDefault(); // Allow drop
+      event.preventDefault();
     }
 
     function handleDrop(event) {
@@ -177,22 +168,11 @@
         const draggedIndex = shuffledTiles.findIndex(t => t.element === draggedTile);
         const targetIndex = shuffledTiles.findIndex(t => t.element === targetTile);
 
-        // Check if the target tile is placed in its correct position
-        if (targetTile.dataset.correctIndex == draggedTile.dataset.correctIndex) {
-          // Correct move
-          updateScore(10); // Add 10 points for correct placement
-        } else {
-          // Incorrect move
-          updateScore(-1); // Subtract 1 point for incorrect placement
-        }
-
-        // Swap tiles in shuffledTiles array
         [shuffledTiles[draggedIndex], shuffledTiles[targetIndex]] = [
           shuffledTiles[targetIndex],
           shuffledTiles[draggedIndex],
         ];
 
-        // Update current indices
         shuffledTiles.forEach((tile, index) => {
           tile.element.dataset.currentIndex = index;
         });
@@ -200,7 +180,7 @@
         renderTiles();
 
         if (checkWinCondition()) {
-          showGameOver();
+          gameOverScreen.style.display = "block";
         }
       }
     }
@@ -209,18 +189,11 @@
       return shuffledTiles.every(tile => tile.element.dataset.correctIndex === tile.element.dataset.currentIndex);
     }
 
-    function showGameOver() {
-      finalScore.textContent = score;
-      gameOverScreen.style.display = "block";
-    }
-
     restartBtn.addEventListener("click", () => {
-      score = 0;
       gameOverScreen.style.display = "none";
       initGame();
     });
 
-    // Initialize the game when the page loads
     initGame();
   </script>
 </body>
