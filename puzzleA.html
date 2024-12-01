@@ -10,7 +10,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-image: url('https://i.postimg.cc/Y9xNt2tq/Screenshot-2024-11-30-184452.png'); /* Replace with your background image URL */
+      background-image: url('https://i.postimg.cc/Y9xNt2tq/Screenshot-2024-11-30-184452.png');
       background-size: cover;
       background-position: center;
       font-family: Arial, sans-serif;
@@ -19,14 +19,14 @@
     }
 
     #game-container {
-      width: 400px;
-      height: 400px;
+      width: 300px;
+      height: 300px;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
       gap: 2px;
       border: 5px solid #4682b4;
-      background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+      background-color: rgba(255, 255, 255, 0.8);
       border-radius: 15px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     }
@@ -34,7 +34,7 @@
     .tile {
       width: 100%;
       height: 100%;
-      background-size: 400px 400px;
+      background-size: 300px 300px;
       border: 1px solid #cccccc;
       cursor: grab;
     }
@@ -52,13 +52,12 @@
       border: 2px solid #4682b4;
       border-radius: 10px;
     }
-    
+
     #game-over h1 {
       color: #4682b4;
       margin-bottom: 20px;
     }
 
-    /* Style the restart button */
     #restart-btn {
       padding: 12px 25px;
       font-size: 18px;
@@ -74,21 +73,19 @@
       background-color: #5a9bd6;
       transform: scale(1.1);
     }
-
   </style>
 </head>
 <body>
   <div id="game-container"></div>
   <div id="game-over">
     <h1>Congratulations! You solved the puzzle!</h1>
-        <button id="restart-btn">Play Again</button>
+    <button id="restart-btn">Play Again</button>
   </div>
 
   <script>
     const gameContainer = document.getElementById("game-container");
     const gameOverScreen = document.getElementById("game-over");
     const restartBtn = document.getElementById("restart-btn");
-    const finalScore = document.getElementById("final-score");
 
     const imageUrls = [
       "https://i.postimg.cc/tCKP7fY0/Screenshot-2024-11-29-180820-removebg-preview.png",
@@ -102,11 +99,6 @@
     let tiles = [];
     let shuffledTiles = [];
     let imageUrl = "";
-    let score = 0;
-
-    function updateScore(amount) {
-      score += amount;
-    }
 
     function initGame() {
       imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
@@ -114,7 +106,7 @@
       tiles = [];
       gameContainer.innerHTML = "";
 
-      // Create tiles with puzzle pieces
+      // Create tiles for the 3x3 grid
       for (let row = 0; row < gridSize; row++) {
         for (let col = 0; col < gridSize; col++) {
           const tile = document.createElement("div");
@@ -141,7 +133,6 @@
     }
 
     function shuffleTiles() {
-      // Shuffle tiles
       for (let i = shuffledTiles.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffledTiles[i], shuffledTiles[j]] = [shuffledTiles[j], shuffledTiles[i]];
@@ -177,22 +168,11 @@
         const draggedIndex = shuffledTiles.findIndex(t => t.element === draggedTile);
         const targetIndex = shuffledTiles.findIndex(t => t.element === targetTile);
 
-        // Check if the target tile is placed in its correct position
-        if (targetTile.dataset.correctIndex == draggedTile.dataset.correctIndex) {
-          // Correct move
-          updateScore(10); // Add 10 points for correct placement
-        } else {
-          // Incorrect move
-          updateScore(-1); // Subtract 1 point for incorrect placement
-        }
-
-        // Swap tiles in shuffledTiles array
         [shuffledTiles[draggedIndex], shuffledTiles[targetIndex]] = [
           shuffledTiles[targetIndex],
           shuffledTiles[draggedIndex],
         ];
 
-        // Update current indices
         shuffledTiles.forEach((tile, index) => {
           tile.element.dataset.currentIndex = index;
         });
@@ -210,17 +190,14 @@
     }
 
     function showGameOver() {
-      finalScore.textContent = score;
       gameOverScreen.style.display = "block";
     }
 
     restartBtn.addEventListener("click", () => {
-      score = 0;
       gameOverScreen.style.display = "none";
       initGame();
     });
 
-    // Initialize the game when the page loads
     initGame();
   </script>
 </body>
