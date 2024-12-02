@@ -7,29 +7,29 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            background-image: url('https://thumb.ac-illust.com/8f/8f9206971de5e7cb01d2a1707f11ee73_t.jpeg'); /* Replace with your background image */
+            margin: 0;
+            padding: 0;
+            background-image: url('https://thumb.ac-illust.com/8f/8f9206971de5e7cb01d2a1707f11ee73_t.jpeg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
             color: white;
-            margin: 0;
-            padding: 0;
+            text-align: center;
         }
         h1, h2 {
             color: black;
         }
         .game-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Two buttons per row */
-            grid-template-rows: auto;
+            grid-template-columns: repeat(2, 1fr);
             gap: 30px;
             justify-content: center;
             padding: 40px;
-        }
-        .center {
-            grid-column: 1 / span 2; /* Make the third button span across two columns */
-            justify-self: center;
         }
         .game-button {
             position: relative;
@@ -40,10 +40,10 @@
             cursor: pointer;
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
             transition: transform 0.2s;
+            animation: dance 2s infinite;
         }
         .game-button:hover {
             transform: scale(1.05);
@@ -60,34 +60,114 @@
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
         }
-        @media (max-width: 768px) {
-            .game-container {
-                grid-template-columns: 1fr; /* Stack buttons vertically on smaller screens */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://static.vecteezy.com/system/resources/thumbnails/005/384/360/small_2x/abstract-seamless-pattern-of-many-hearts-on-blue-background-cute-image-simple-style-can-be-use-for-print-paper-fabric-wallpaper-free-vector.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            text-align: center;
+        }
+        #loading h1 {
+            color: black;
+            font-size: 2.5em;
+            animation: fadeText 2s infinite;
+        }
+        #loading p {
+            color: black;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+        @keyframes fadeText {
+            0%, 100% {
+                opacity: 1;
             }
-            .center {
-                grid-column: auto;
+            50% {
+                opacity: 0.5;
+            }
+        }
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+        @keyframes dance {
+            0%, 100% {
+                transform: rotate(0) scale(1);
+            }
+            25% {
+                transform: rotate(-5deg) scale(1.05);
+            }
+            50% {
+                transform: rotate(5deg) scale(1);
+            }
+            75% {
+                transform: rotate(-5deg) scale(0.95);
             }
         }
     </style>
 </head>
 <body>
+    <!-- Background Audio -->
+    <audio id="background-audio">
+        <source src="https://rejoiceingames.github.io/snapsta3/peppa%20(mp3cut.net).mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
-    <h1>Sucumberf World</h1>
-    <h2>Choose Your Game</h2>
-
-    <div class="game-container">
-        <!-- Game 1: Mininta -->
-        <a href="https://rejoiceingames.github.io/snapsta3/sucumberf.html.html" class="game-button" style="background-image: url('https://i.postimg.cc/zX0F6Fjb/Screenshot-2024-11-30-202123-removebg-preview.png');">
-            <span>Mininta</span>
-        </a>
-
-        <!-- Game 2: Puzzle -->
-        <a href="https://rejoiceingames.github.io/snapsta3/sucumberf2.html" class="game-button" style="background-image: url('https://i.postimg.cc/4xHHP6FT/Screenshot-2024-11-30-202413-removebg-preview.png');">
-            <span>Puzzle</span>
-        </a>
-
-        </a>
+    <!-- Loading Screen -->
+    <div id="loading">
+        <h1>Loading.....!</h1>
+       <br>
+        <p>.</p>
     </div>
 
+    <!-- Main Content -->
+    <div id="main-content" style="display: none;">
+        <h1>Sucumberf World</h1>
+        <h2>Choose Your Game</h2>
+        <div class="game-container">
+            <a href="https://rejoiceingames.github.io/snapsta3/sucumberf.html.html" class="game-button" style="background-image: url('https://i.postimg.cc/zX0F6Fjb/Screenshot-2024-11-30-202123-removebg-preview.png');">
+                <span>Mininta</span>
+            </a>
+            <a href="https://rejoiceingames.github.io/snapsta3/sucumberf2.html" class="game-button" style="background-image: url('https://i.postimg.cc/4xHHP6FT/Screenshot-2024-11-30-202413-removebg-preview.png');">
+                <span>Puzzle</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById("background-audio");
+
+        // Show content after loading screen
+        window.addEventListener("load", () => {
+            const loading = document.getElementById("loading");
+            const mainContent = document.getElementById("main-content");
+
+            setTimeout(() => {
+                // Fade out loading screen
+                loading.classList.add("fade-out");
+                setTimeout(() => {
+                    loading.style.display = "none";
+                    mainContent.style.display = "block";
+
+                    // Play audio when main content is displayed
+                    audio.play().catch((error) => {
+                        console.error("Audio playback failed:", error);
+                    });
+                }, 1000);
+            }, 10000); // Adjust duration as needed
+        });
+    </script>
 </body>
 </html>
