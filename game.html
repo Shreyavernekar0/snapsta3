@@ -7,43 +7,42 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            text-align: center;
             background-image: url('https://thumb.ac-illust.com/8f/8f9206971de5e7cb01d2a1707f11ee73_t.jpeg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
             color: white;
-            text-align: center;
+            margin: 0;
+            padding: 0;
         }
         h1, h2 {
             color: black;
+            animation: fadeIn 2s ease-out;
+            margin: 10px;
         }
         .game-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
             justify-content: center;
-            padding: 40px;
+            padding: 20px;
+            animation: slideUp 2s ease-in-out;
         }
         .game-button {
             position: relative;
-            width: 350px;
-            height: 200px;
+            width: 100%;
+            height: 250px;
+            max-width: 400px;
             margin: 0 auto;
             border: none;
             cursor: pointer;
             background-size: cover;
             background-position: center;
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
             transition: transform 0.2s;
-            animation: dance 2s infinite;
+            animation: bounce 2s infinite;
         }
         .game-button:hover {
             transform: scale(1.05);
@@ -56,9 +55,9 @@
             color: white;
             font-size: 1.5em;
             background-color: rgba(0, 0, 0, 0.6);
-            padding: 5px 0;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
+            padding: 10px 0;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
         }
         #loading {
             position: fixed;
@@ -70,50 +69,31 @@
             background-size: cover;
             background-position: center;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             text-align: center;
+            animation: fadeIn 2s ease-out;
         }
         #loading h1 {
             color: black;
             font-size: 2.5em;
-            animation: fadeText 2s infinite;
+            animation: pulse 2s infinite;
         }
         #loading p {
             color: black;
             font-size: 1.2em;
             margin-top: 10px;
+            animation: fadeIn 3s ease-out;
         }
-        @keyframes fadeText {
-            0%, 100% {
-                opacity: 1;
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .game-button {
+                height: 200px;
             }
-            50% {
-                opacity: 0.5;
-            }
-        }
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-            }
-            to {
-                opacity: 0;
-                visibility: hidden;
-            }
-        }
-        @keyframes dance {
-            0%, 100% {
-                transform: rotate(0) scale(1);
-            }
-            25% {
-                transform: rotate(-5deg) scale(1.05);
-            }
-            50% {
-                transform: rotate(5deg) scale(1);
-            }
-            75% {
-                transform: rotate(-5deg) scale(0.95);
+            #loading h1 {
+                font-size: 1.5em;
             }
         }
     </style>
@@ -125,11 +105,15 @@
         Your browser does not support the audio element.
     </audio>
 
+    <!-- Play Button -->
+    <button id="play-audio" style="position: absolute; top: 20px; right: 20px; z-index: 1001; padding: 10px 20px; background-color: #f06292; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Play Music
+    </button>
+
     <!-- Loading Screen -->
     <div id="loading">
         <h1>Loading.....!</h1>
-       <br>
-        <p>.</p>
+        <p>Thank you for stopping by! Hope I may relax you.</p>
     </div>
 
     <!-- Main Content -->
@@ -148,25 +132,26 @@
 
     <script>
         const audio = document.getElementById("background-audio");
+        const playButton = document.getElementById("play-audio");
+        const loading = document.getElementById("loading");
+        const mainContent = document.getElementById("main-content");
+
+        // Play audio on button click
+        playButton.addEventListener("click", () => {
+            audio.play().catch((error) => {
+                console.error("Audio playback failed:", error);
+            });
+        });
 
         // Show content after loading screen
         window.addEventListener("load", () => {
-            const loading = document.getElementById("loading");
-            const mainContent = document.getElementById("main-content");
-
             setTimeout(() => {
-                // Fade out loading screen
-                loading.classList.add("fade-out");
+                loading.style.opacity = 0;
                 setTimeout(() => {
                     loading.style.display = "none";
                     mainContent.style.display = "block";
-
-                    // Play audio when main content is displayed
-                    audio.play().catch((error) => {
-                        console.error("Audio playback failed:", error);
-                    });
                 }, 1000);
-            }, 10000); // Adjust duration as needed
+            }, 5000);
         });
     </script>
 </body>
