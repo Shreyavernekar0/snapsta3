@@ -10,12 +10,46 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-image: url('https://i.pinimg.com/originals/04/9e/5d/049e5d14ba1709ce77b31184842ae130.jpg');
+      background-image: url('https://i.postimg.cc/Y9xNt2tq/Screenshot-2024-11-30-184452.png');
       background-size: cover;
       background-position: center;
       font-family: Arial, sans-serif;
       margin: 0;
       color: #fff;
+    }
+
+    #level-selector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #4682b4;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    #level-selector h2 {
+      margin-bottom: 20px;
+      color: #4682b4;
+    }
+
+    .level-btn {
+      margin: 10px 0;
+      padding: 12px 25px;
+      font-size: 18px;
+      background-color: #4682b4;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .level-btn:hover {
+      background-color: #5a9bd6;
+      transform: scale(1.1);
     }
 
     #game-container {
@@ -29,6 +63,7 @@
       background-color: rgba(255, 255, 255, 0.8);
       border-radius: 15px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      display: none; /* Hidden until a level is chosen */
     }
 
     .tile {
@@ -52,7 +87,7 @@
       border: 2px solid #4682b4;
       border-radius: 10px;
     }
-    
+
     #game-over h1 {
       color: #4682b4;
       margin-bottom: 20px;
@@ -76,6 +111,12 @@
   </style>
 </head>
 <body>
+  <div id="level-selector">
+    <h2>Select Difficulty Level</h2>
+    <button class="level-btn" data-level="Simple">Simple</button>
+    <button class="level-btn" data-level="Average">Average</button>
+    <button class="level-btn" data-level="Complex">Complex</button>
+  </div>
   <div id="game-container"></div>
   <div id="game-over">
     <h1>Congratulations! You solved the puzzle!</h1>
@@ -83,26 +124,39 @@
   </div>
 
   <script>
+    const levelSelector = document.getElementById("level-selector");
     const gameContainer = document.getElementById("game-container");
     const gameOverScreen = document.getElementById("game-over");
     const restartBtn = document.getElementById("restart-btn");
 
-    const imageUrls = [
-      "https://rukminim2.flixcart.com/image/850/1000/kkwwu4w0/poster/i/j/i/large-doraemon-cartoon-waterproof-vinyl-sticker-poster-can2490-2-original-imagy5enhzahmevc.jpeg?q=90&crop=false",
-      "https://i.pinimg.com/originals/54/7a/7f/547a7f9693b6ab79efcd963d2d760fcf.png",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOrTv215GpByCh4Yk1RWHLHso_dvV7MuscDg&s",
-      "https://static.wikia.nocookie.net/alienfilm/images/4/49/Dorami.webp/revision/latest/scale-to-width-down/326?cb=20210211211219",
-      "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/472292a2-8cba-4ccf-8403-ded0c3d6d3ad/daz4wdh-ca16e39c-2dea-48de-8722-7e787ce8872a.png/v1/fill/w_827,h_868,q_80,strp/nobita_and_shizuka_by_kittykun123_daz4wdh-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODY4IiwicGF0aCI6IlwvZlwvNDcyMjkyYTItOGNiYS00Y2NmLTg0MDMtZGVkMGMzZDZkM2FkXC9kYXo0d2RoLWNhMTZlMzljLTJkZWEtNDhkZS04NzIyLTdlNzg3Y2U4ODcyYS5wbmciLCJ3aWR0aCI6Ijw9ODI3In1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.TEVv7GGdLodmsbMO5IiuhCGT-6Hb_B3oKB8UDTju3Z4"
-
-    ];
+    const images = {
+      Simple: [
+        "https://rukminim2.flixcart.com/image/850/1000/kkwwu4w0/poster/i/j/i/large-doraemon-cartoon-waterproof-vinyl-sticker-poster-can2490-2-original-imagy5enhzahmevc.jpeg?q=90&crop=false",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOrTv215GpByCh4Yk1RWHLHso_dvV7MuscDg&s",
+        "https://static.wikia.nocookie.net/alienfilm/images/4/49/Dorami.webp/revision/latest/scale-to-width-down/326?cb=20210211211219",
+      ],
+      Average: [
+                "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/472292a2-8cba-4ccf-8403-ded0c3d6d3ad/daz4wdh-ca16e39c-2dea-48de-8722-7e787ce8872a.png/v1/fill/w_827,h_868,q_80,strp/nobita_and_shizuka_by_kittykun123_daz4wdh-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODY4IiwicGF0aCI6IlwvZlwvNDcyMjkyYTItOGNiYS00Y2NmLTg0MDMtZGVkMGMzZDZkM2FkXC9kYXo0d2RoLWNhMTZlMzljLTJkZWEtNDhkZS04NzIyLTdlNzg3Y2U4ODcyYS5wbmciLCJ3aWR0aCI6Ijw9ODI3In1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.TEVv7GGdLodmsbMO5IiuhCGT-6Hb_B3oKB8UDTju3Z4",
+                "https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/7085/1715414277085-i",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg5gBHYl1YWvyJ6XL0zjvst8ANsRxpXoKmkg&s",
+      ],
+      Complex: [
+                "https://i.pinimg.com/originals/54/7a/7f/547a7f9693b6ab79efcd963d2d760fcf.png",
+                "https://m.media-amazon.com/images/M/MV5BNTRjMDA5ZTQtNWVkMy00OTAwLWI2NmMtYjQxYWM4MTIxYWFhXkEyXkFqcGc@._V1_.jpg",
+                "https://i.redd.it/6vcmez2bl2v81.jpg",
+      ],
+    };
 
     const gridSize = 3;
     let tiles = [];
     let shuffledTiles = [];
     let imageUrl = "";
 
-    function initGame() {
-      imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+    function initGame(level) {
+      levelSelector.style.display = "none";
+      gameContainer.style.display = "grid";
+
+      imageUrl = images[level][Math.floor(Math.random() * images[level].length)];
       tiles = [];
       gameContainer.innerHTML = "";
 
@@ -189,10 +243,15 @@
 
     restartBtn.addEventListener("click", () => {
       gameOverScreen.style.display = "none";
-      initGame();
+      levelSelector.style.display = "flex";
     });
 
-    initGame();
+    document.querySelectorAll(".level-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        const level = button.getAttribute("data-level");
+        initGame(level);
+      });
+    });
   </script>
 </body>
 </html>
