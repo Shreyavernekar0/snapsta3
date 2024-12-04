@@ -10,12 +10,46 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-image: url('https://img.freepik.com/free-psd/halloween-border-isolated_23-2150883424.jpg');
+      background-image: url('https://i.postimg.cc/Y9xNt2tq/Screenshot-2024-11-30-184452.png');
       background-size: cover;
       background-position: center;
       font-family: Arial, sans-serif;
       margin: 0;
       color: #fff;
+    }
+
+    #level-selector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #4682b4;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    #level-selector h2 {
+      margin-bottom: 20px;
+      color: #4682b4;
+    }
+
+    .level-btn {
+      margin: 10px 0;
+      padding: 12px 25px;
+      font-size: 18px;
+      background-color: #4682b4;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .level-btn:hover {
+      background-color: #5a9bd6;
+      transform: scale(1.1);
     }
 
     #game-container {
@@ -29,6 +63,7 @@
       background-color: rgba(255, 255, 255, 0.8);
       border-radius: 15px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      display: none; /* Hidden until a level is chosen */
     }
 
     .tile {
@@ -52,7 +87,7 @@
       border: 2px solid #4682b4;
       border-radius: 10px;
     }
-    
+
     #game-over h1 {
       color: #4682b4;
       margin-bottom: 20px;
@@ -76,6 +111,12 @@
   </style>
 </head>
 <body>
+  <div id="level-selector">
+    <h2>Select Difficulty Level</h2>
+    <button class="level-btn" data-level="hard">Simple</button>
+    <button class="level-btn" data-level="harder">Average</button>
+    <button class="level-btn" data-level="hardest">Complex</button>
+  </div>
   <div id="game-container"></div>
   <div id="game-over">
     <h1>Congratulations! You solved the puzzle!</h1>
@@ -83,27 +124,41 @@
   </div>
 
   <script>
+    const levelSelector = document.getElementById("level-selector");
     const gameContainer = document.getElementById("game-container");
     const gameOverScreen = document.getElementById("game-over");
     const restartBtn = document.getElementById("restart-btn");
 
-    const imageUrls = [
-       "https://static.vecteezy.com/system/resources/previews/025/774/874/non_2x/spiderman-logo-red-background-free-vector.jpg",
-      "https://i.pinimg.com/originals/db/6a/d3/db6ad35fa10d6669ccaeef4981131697.png",
-      "https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/DD54F7FCA01C567510F4581770B3D5BE411E75D7F9DB88602B9A62725A5A74A5/scale?width=1200&aspectRatio=1.78&format=webp",
-      "https://wallpapers-clan.com/wp-content/uploads/2024/02/aesthetic-spiderman-logo-desktop-wallpaper-preview.jpg",
-      "https://i.ebayimg.com/images/g/ZnEAAOSwq4hdioNq/s-l400.jpg"
+    const images = {
+      hard: [
+         "https://static.vecteezy.com/system/resources/previews/025/774/874/non_2x/spiderman-logo-red-background-free-vector.jpg",
+        "https://i.pinimg.com/originals/db/6a/d3/db6ad35fa10d6669ccaeef4981131697.png",
+        "https://i.ebayimg.com/images/g/ZnEAAOSwq4hdioNq/s-l400.jpg",
 
+      ],
+      harder: [
+        "https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/DD54F7FCA01C567510F4581770B3D5BE411E75D7F9DB88602B9A62725A5A74A5/scale?width=1200&aspectRatio=1.78&format=webp",
+                "https://i.blogs.es/738268/sv2_stc0085.1046_lm_v1/450_1000.jpeg",
 
-    ];
+      ],
+      hardest: [
+        "https://wallpapers-clan.com/wp-content/uploads/2024/02/aesthetic-spiderman-logo-desktop-wallpaper-preview.jpg",
+                "https://upload.wikimedia.org/wikipedia/en/2/21/Web_of_Spider-Man_Vol_1_129-1.png",
+                "https://images5.alphacoders.com/132/1328421.png",
+
+      ],
+    };
 
     const gridSize = 3;
     let tiles = [];
     let shuffledTiles = [];
     let imageUrl = "";
 
-    function initGame() {
-      imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+    function initGame(level) {
+      levelSelector.style.display = "none";
+      gameContainer.style.display = "grid";
+
+      imageUrl = images[level][Math.floor(Math.random() * images[level].length)];
       tiles = [];
       gameContainer.innerHTML = "";
 
@@ -190,10 +245,15 @@
 
     restartBtn.addEventListener("click", () => {
       gameOverScreen.style.display = "none";
-      initGame();
+      levelSelector.style.display = "flex";
     });
 
-    initGame();
+    document.querySelectorAll(".level-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        const level = button.getAttribute("data-level");
+        initGame(level);
+      });
+    });
   </script>
 </body>
 </html>
