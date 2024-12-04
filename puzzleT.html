@@ -10,12 +10,46 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-image: url('https://c4.wallpaperflare.com/wallpaper/542/844/960/cat-mustache-minimalism-tom-and-jerry-wallpaper-preview.jpg');
+      background-image: url('https://i.postimg.cc/Y9xNt2tq/Screenshot-2024-11-30-184452.png');
       background-size: cover;
       background-position: center;
       font-family: Arial, sans-serif;
       margin: 0;
       color: #fff;
+    }
+
+    #level-selector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #4682b4;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    #level-selector h2 {
+      margin-bottom: 20px;
+      color: #4682b4;
+    }
+
+    .level-btn {
+      margin: 10px 0;
+      padding: 12px 25px;
+      font-size: 18px;
+      background-color: #4682b4;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .level-btn:hover {
+      background-color: #5a9bd6;
+      transform: scale(1.1);
     }
 
     #game-container {
@@ -29,6 +63,7 @@
       background-color: rgba(255, 255, 255, 0.8);
       border-radius: 15px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      display: none; /* Hidden until a level is chosen */
     }
 
     .tile {
@@ -52,7 +87,7 @@
       border: 2px solid #4682b4;
       border-radius: 10px;
     }
-    
+
     #game-over h1 {
       color: #4682b4;
       margin-bottom: 20px;
@@ -76,6 +111,12 @@
   </style>
 </head>
 <body>
+  <div id="level-selector">
+    <h2>Select Difficulty Level</h2>
+    <button class="level-btn" data-level="Simple">Simple</button>
+    <button class="level-btn" data-level="Average">Average</button>
+    <button class="level-btn" data-level="Complex">Complex</button>
+  </div>
   <div id="game-container"></div>
   <div id="game-over">
     <h1>Congratulations! You solved the puzzle!</h1>
@@ -83,28 +124,38 @@
   </div>
 
   <script>
+    const levelSelector = document.getElementById("level-selector");
     const gameContainer = document.getElementById("game-container");
     const gameOverScreen = document.getElementById("game-over");
     const restartBtn = document.getElementById("restart-btn");
 
-    const imageUrls = [
-       "https://images.firstpost.com/uploads/2023/02/tomandherry.jpg?im=FitAndFill=(596,336)",
-      "https://i.redd.it/alh5mkc5tye91.jpg",
-      "https://static.vecteezy.com/system/resources/previews/022/024/202/non_2x/tom-and-jerry-cartoon-free-vector.jpg",
-      "https://i.pinimg.com/236x/6d/bf/1d/6dbf1d225cde22a9da3846504adca0bd.jpg",
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVoIzef_DRlimohTRLunAevFyqvToe9x-9_wjugHm3dX3dIRrHwexw4Mf5rdGFFEjJ96U&usqp=CAU"
-
-
-
-    ];
+    const images = {
+      Simple: [
+        "https://i.redd.it/alh5mkc5tye91.jpg",
+        "https://static.vecteezy.com/system/resources/previews/022/024/202/non_2x/tom-and-jerry-cartoon-free-vector.jpg",
+        "https://www.redwolf.in/image/cache/catalog/stickers/tom-and-jerry-duo-sticker-india-600x800.jpg",
+      ],
+      Average: [
+                "https://images.firstpost.com/uploads/2023/02/tomandherry.jpg?im=FitAndFill=(596,336)",
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVoIzef_DRlimohTRLunAevFyqvToe9x-9_wjugHm3dX3dIRrHwexw4Mf5rdGFFEjJ96U&usqp=CAU",
+      ],
+      Complex: [
+                "https://i.pinimg.com/236x/6d/bf/1d/6dbf1d225cde22a9da3846504adca0bd.jpg",
+                "https://upload.wikimedia.org/wikipedia/en/3/30/Tom_and_Jerry_The_Fast_and_the_Furry_cover.jpg",
+                "https://wallpapers.com/images/hd/courting-tom-and-jerry-cartoon-lz95bj064sb9weo1.jpg",
+      ],
+    };
 
     const gridSize = 3;
     let tiles = [];
     let shuffledTiles = [];
     let imageUrl = "";
 
-    function initGame() {
-      imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+    function initGame(level) {
+      levelSelector.style.display = "none";
+      gameContainer.style.display = "grid";
+
+      imageUrl = images[level][Math.floor(Math.random() * images[level].length)];
       tiles = [];
       gameContainer.innerHTML = "";
 
@@ -191,10 +242,15 @@
 
     restartBtn.addEventListener("click", () => {
       gameOverScreen.style.display = "none";
-      initGame();
+      levelSelector.style.display = "flex";
     });
 
-    initGame();
+    document.querySelectorAll(".level-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        const level = button.getAttribute("data-level");
+        initGame(level);
+      });
+    });
   </script>
 </body>
 </html>
