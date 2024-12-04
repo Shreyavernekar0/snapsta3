@@ -18,6 +18,40 @@
       color: #fff;
     }
 
+    #level-selector {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px solid #4682b4;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    #level-selector h2 {
+      margin-bottom: 20px;
+      color: #4682b4;
+    }
+
+    .level-btn {
+      margin: 10px 0;
+      padding: 12px 25px;
+      font-size: 18px;
+      background-color: #4682b4;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .level-btn:hover {
+      background-color: #5a9bd6;
+      transform: scale(1.1);
+    }
+
     #game-container {
       width: 300px;
       height: 300px;
@@ -29,6 +63,7 @@
       background-color: rgba(255, 255, 255, 0.8);
       border-radius: 15px;
       box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      display: none; /* Hidden until a level is chosen */
     }
 
     .tile {
@@ -76,6 +111,12 @@
   </style>
 </head>
 <body>
+  <div id="level-selector">
+    <h2>Select Difficulty Level</h2>
+    <button class="level-btn" data-level="hard">Simple</button>
+    <button class="level-btn" data-level="harder">Average</button>
+    <button class="level-btn" data-level="hardest">Complex</button>
+  </div>
   <div id="game-container"></div>
   <div id="game-over">
     <h1>Congratulations! You solved the puzzle!</h1>
@@ -83,30 +124,45 @@
   </div>
 
   <script>
+    const levelSelector = document.getElementById("level-selector");
     const gameContainer = document.getElementById("game-container");
     const gameOverScreen = document.getElementById("game-over");
     const restartBtn = document.getElementById("restart-btn");
 
-    const imageUrls = [
-      "https://i.postimg.cc/tCKP7fY0/Screenshot-2024-11-29-180820-removebg-preview.png",
-      "https://i.postimg.cc/ZnkH5sdV/Screenshot-2024-11-30-182518.png",
-      "https://i.postimg.cc/VL84yT1N/Screenshot-2024-11-30-182703.png",
-      "https://i.postimg.cc/Qd6qTd7B/Screenshot-2024-11-30-182931.png",
-      "https://i.postimg.cc/wT2rwHJz/Screenshot-2024-11-30-183603-removebg-preview.png"
-    ];
+    const images = {
+      hard: [
+         "https://i.postimg.cc/tCKP7fY0/Screenshot-2024-11-29-180820-removebg-preview.png",
+        "https://i.postimg.cc/VL84yT1N/Screenshot-2024-11-30-182703.png",
+        "https://i.postimg.cc/Qd6qTd7B/Screenshot-2024-11-30-182931.png",
+
+      ],
+      harder: [
+        "https://i.postimg.cc/wT2rwHJz/Screenshot-2024-11-30-183603-removebg-preview.png",
+                "https://i.redd.it/4k882sauw3091.jpg",
+                "https://m.media-amazon.com/images/M/MV5BZmY3YTU3YTgtMDY1OC00ZTlhLWE0MjUtNDYwZmE0NjJiNjFiXkEyXkFqcGc@._V1_.jpg",
+
+      ],
+      hardest: [
+        "https://i.postimg.cc/ZnkH5sdV/Screenshot-2024-11-30-182518.png",
+                "https://i.ytimg.com/vi/V8DtMqzN-R0/maxresdefault.jpg",
+                "https://m.media-amazon.com/images/M/MV5BMGJkMGIyOWYtMGI5Ny00MDdmLWE2ZmQtODNjZTU5M2Q2MWZjXkEyXkFqcGc@._V1_.jpg",
+
+      ],
+    };
 
     const gridSize = 3;
     let tiles = [];
     let shuffledTiles = [];
     let imageUrl = "";
 
-    function initGame() {
-      imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+    function initGame(level) {
+      levelSelector.style.display = "none";
+      gameContainer.style.display = "grid";
 
+      imageUrl = images[level][Math.floor(Math.random() * images[level].length)];
       tiles = [];
       gameContainer.innerHTML = "";
 
-      // Create tiles for the 3x3 grid
       for (let row = 0; row < gridSize; row++) {
         for (let col = 0; col < gridSize; col++) {
           const tile = document.createElement("div");
@@ -117,7 +173,6 @@
           tile.dataset.currentIndex = row * gridSize + col;
           tile.draggable = true;
 
-          // Add drag-and-drop functionality
           tile.addEventListener("dragstart", handleDragStart);
           tile.addEventListener("dragover", handleDragOver);
           tile.addEventListener("drop", handleDrop);
@@ -156,7 +211,7 @@
     }
 
     function handleDragOver(event) {
-      event.preventDefault(); // Allow drop
+      event.preventDefault();
     }
 
     function handleDrop(event) {
@@ -180,7 +235,7 @@
         renderTiles();
 
         if (checkWinCondition()) {
-          showGameOver();
+          gameOverScreen.style.display = "block";
         }
       }
     }
@@ -189,16 +244,17 @@
       return shuffledTiles.every(tile => tile.element.dataset.correctIndex === tile.element.dataset.currentIndex);
     }
 
-    function showGameOver() {
-      gameOverScreen.style.display = "block";
-    }
-
     restartBtn.addEventListener("click", () => {
       gameOverScreen.style.display = "none";
-      initGame();
+      levelSelector.style.display = "flex";
     });
 
-    initGame();
+    document.querySelectorAll(".level-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        const level = button.getAttribute("data-level");
+        initGame(level);
+      });
+    });
   </script>
 </body>
 </html>
