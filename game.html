@@ -15,6 +15,7 @@
             color: white;
             margin: 0;
             padding: 0;
+            overflow: hidden; /* Prevent scrolling during animations */
         }
         h1, h2 {
             color: black;
@@ -42,7 +43,6 @@
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
             transition: transform 0.2s;
-            animation: bounce 2s infinite;
         }
         .game-button:hover {
             transform: scale(1.05);
@@ -87,6 +87,42 @@
             margin-top: 10px;
             animation: fadeIn 3s ease-out;
         }
+        #main-content {
+            display: none;
+            opacity: 0;
+            transform: translateY(50px); /* Initial position for animation */
+        }
+        #main-content.show {
+            display: block;
+            animation: slideIn 1s ease-in-out forwards;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.7;
+            }
+        }
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Media Queries for Responsiveness */
         @media (max-width: 768px) {
             .game-button {
@@ -99,17 +135,6 @@
     </style>
 </head>
 <body>
-    <!-- Background Audio -->
-    <audio id="background-audio">
-        <source src="https://rejoiceingames.github.io/snapsta3/peppa%20(mp3cut.net).mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <!-- Play Button -->
-    <button id="play-audio" style="position: absolute; top: 20px; right: 20px; z-index: 1001; padding: 10px 20px; background-color: #f06292; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        Play Music
-    </button>
-
     <!-- Loading Screen -->
     <div id="loading">
         <h1>Loading.....!</h1>
@@ -117,7 +142,7 @@
     </div>
 
     <!-- Main Content -->
-    <div id="main-content" style="display: none;">
+    <div id="main-content">
         <h1>Sucumberf World</h1>
         <h2>Choose Your Game</h2>
         <div class="game-container">
@@ -131,27 +156,18 @@
     </div>
 
     <script>
-        const audio = document.getElementById("background-audio");
-        const playButton = document.getElementById("play-audio");
         const loading = document.getElementById("loading");
         const mainContent = document.getElementById("main-content");
 
-        // Play audio on button click
-        playButton.addEventListener("click", () => {
-            audio.play().catch((error) => {
-                console.error("Audio playback failed:", error);
-            });
-        });
-
-        // Show content after loading screen
+        // Show content after loading screen with animation
         window.addEventListener("load", () => {
             setTimeout(() => {
-                loading.style.opacity = 0;
+                loading.style.opacity = 0; // Fade out the loading screen
                 setTimeout(() => {
                     loading.style.display = "none";
-                    mainContent.style.display = "block";
+                    mainContent.classList.add("show"); // Trigger animation for main content
                 }, 1000);
-            }, 5000);
+            }, 5000); // Adjust duration as needed
         });
     </script>
 </body>
