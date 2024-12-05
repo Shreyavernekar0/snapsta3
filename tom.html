@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hello Kitty Racing Game</title>
   <style>
-    /* Your existing CSS */
+    
     * {
       margin: 0;
       padding: 0;
@@ -16,16 +16,16 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: white; /* Light pink background */
+      background-color: white; 
       background-image: url('https://i.etsystatic.com/49105148/r/il/cd21e7/5739153656/il_300x300.5739153656_ftqs.jpg');
     }
     #game-container {
-      border: 8px solid #800000; /* Hello Kitty pink border */
+      border: 8px solid #800000; 
       width: 400px;
       height: 600px;
       position: relative;
       overflow: hidden;
-      background-color: white; /* Light pastel pink */
+      background-color: white; 
     }
 #instructions {
       position: absolute;
@@ -69,9 +69,9 @@
       position: absolute;
       top: 10px;
       left: 10px;
-      color: #C4A484; /* Pink text */
+      color: #C4A484; 
       font-size: 20px;
-      font-family: 'Comic Sans MS', cursive, sans-serif; /* Playful font */
+      font-family: 'Comic Sans MS', cursive, sans-serif; 
       z-index: 10;
     }
     #game-over {
@@ -80,20 +80,20 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: #C4A484; /* Pink text */
+      color: #C4A484; 
       text-align: center;
     }
     #restart-btn {
       padding: 10px 20px;
       font-size: 18px;
-      background-color: #C4A484; /* Pink button */
+      background-color: #C4A484; 
       border: none;
       cursor: pointer;
       color: white;
       margin-top: 10px;
     }
     #restart-btn:hover {
-      background-color: #C4A484; /* Lighter pink */
+      background-color: #C4A484; 
     }
     canvas {
       display: block;
@@ -103,7 +103,7 @@
 <body>
 
   <div id="game-container">
-<!-- Instructions Screen -->
+
     <div id="instructions">
       <h1>Tom Welcomes You...!!</h1>
       <p>
@@ -169,7 +169,6 @@ const instructionsScreen = document.getElementById('instructions');
       direction = null;
     }
 
-    // Mouse Click Controls
     canvas.addEventListener('mousedown', (e) => {
       const clickX = e.clientX;
       const rect = canvas.getBoundingClientRect();
@@ -182,7 +181,7 @@ const instructionsScreen = document.getElementById('instructions');
       direction = null;
     });
 
-    // Keyboard Controls
+    
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') direction = 'left';
       if (e.key === 'ArrowRight') direction = 'right';
