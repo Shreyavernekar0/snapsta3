@@ -101,7 +101,7 @@
 <body>
 
   <div id="game-container">
-    <!-- Instructions Screen -->
+    
     <div id="instructions">
       <h1>Angry Bird Welcomes You...!!</h1>
       <p>
@@ -112,7 +112,7 @@
       <button id="start-btn">Start Game</button>
     </div>
 
-    <!-- Game Content -->
+    
     <div id="scoreboard">Score: 0</div>
     <canvas id="gameCanvas"></canvas>
     <div id="game-over">
@@ -151,7 +151,7 @@
     const bowImg = new Image();
     bowImg.src = 'https://i.postimg.cc/T1yL3qxY/Screenshot-2024-11-29-180921-removebg-preview.png';
 
-    // Touch Controls
+    
     canvas.addEventListener('touchstart', handleTouchStart);
     canvas.addEventListener('touchend', handleTouchEnd);
 
@@ -167,7 +167,7 @@
       direction = null;
     }
 
-    // Mouse Click Controls
+    
     canvas.addEventListener('mousedown', (e) => {
       const clickX = e.clientX;
       const rect = canvas.getBoundingClientRect();
