@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hello Kitty Racing Game</title>
   <style>
-    /* Your existing CSS */
+
     * {
       margin: 0;
       padding: 0;
@@ -16,16 +16,16 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #ffccf9; /* Light pink background */
+      background-color: #ffccf9; 
       background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f5500fbc-0bf2-45c7-817c-c2e06089b145/d66uiam-47b5275d-c26f-4cc1-950e-b0c5fe747b44.jpg/v1/fill/w_1024,h_768,q_75,strp/spider_man_wallpaper_black_by_thereaper87_d66uiam-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzY4IiwicGF0aCI6IlwvZlwvZjU1MDBmYmMtMGJmMi00NWM3LTgxN2MtYzJlMDYwODliMTQ1XC9kNjZ1aWFtLTQ3YjUyNzVkLWMyNmYtNGNjMS05NTBlLWIwYzVmZTc0N2I0NC5qcGciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.JmO5j32MQec-TADxDjqYa_9Y6JSg7DmIWUNlm2WDOaI');
     }
     #game-container {
-      border: 7px solid red; /* Hello Kitty pink border */
+      border: 7px solid red; 
       width: 400px;
       height: 600px;
       position: relative;
       overflow: hidden;
-      background-color: black; /* Light pastel pink */
+      background-color: black; 
     }
 #instructions {
       position: absolute;
@@ -71,7 +71,7 @@
       left: 10px;
       color: red; /* Pink text */
       font-size: 20px;
-      font-family: 'Comic Sans MS', cursive, sans-serif; /* Playful font */
+      font-family: 'Comic Sans MS', cursive, sans-serif; 
       z-index: 10;
     }
     #game-over {
@@ -80,20 +80,20 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: red; /* Pink text */
+      color: red; 
       text-align: center;
     }
     #restart-btn {
       padding: 10px 20px;
       font-size: 18px;
-      background-color: red; /* Pink button */
+      background-color: red; 
       border: none;
       cursor: pointer;
       color: white;
       margin-top: 10px;
     }
     #restart-btn:hover {
-      background-color: red; /* Lighter pink */
+      background-color: red; 
     }
     canvas {
       display: block;
@@ -103,7 +103,7 @@
 <body>
 
   <div id="game-container">
-<!-- Instructions Screen -->
+
     <div id="instructions">
       <h1>Spiderman Welcomes You...!!</h1>
       <p>
@@ -153,7 +153,7 @@ const instructionsScreen = document.getElementById('instructions');
     const bowImg = new Image();
     bowImg.src = 'https://i.postimg.cc/cCXvh9cm/Screenshot-2024-11-29-181835-removebg-preview.png';
 
-    // Mobile touch controls
+    
     canvas.addEventListener('touchstart', handleTouchStart);
     canvas.addEventListener('touchend', handleTouchEnd);
 
@@ -169,7 +169,7 @@ const instructionsScreen = document.getElementById('instructions');
       direction = null;
     }
 
-    // Mouse Click Controls
+   
     canvas.addEventListener('mousedown', (e) => {
       const clickX = e.clientX;
       const rect = canvas.getBoundingClientRect();
@@ -182,7 +182,7 @@ const instructionsScreen = document.getElementById('instructions');
       direction = null;
     });
 
-    // Keyboard Controls
+    
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') direction = 'left';
       if (e.key === 'ArrowRight') direction = 'right';
