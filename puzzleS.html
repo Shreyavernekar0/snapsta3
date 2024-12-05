@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Complete Photo Puzzle</title>
+  <title>Photo Puzzle Game</title>
   <style>
     body {
       display: flex;
@@ -12,7 +12,6 @@
       height: 100vh;
       background-image: url('https://i.postimg.cc/Y9xNt2tq/Screenshot-2024-11-30-184452.png');
       background-size: cover;
-      background-position: center;
       font-family: Arial, sans-serif;
       margin: 0;
       color: #fff;
@@ -26,7 +25,6 @@
       background: rgba(255, 255, 255, 0.9);
       border: 2px solid #4682b4;
       border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
       text-align: center;
     }
 
@@ -44,12 +42,6 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .level-btn:hover {
-      background-color: #5a9bd6;
-      transform: scale(1.1);
     }
 
     #game-container {
@@ -61,17 +53,15 @@
       gap: 2px;
       border: 5px solid #4682b4;
       background-color: rgba(255, 255, 255, 0.8);
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-      display: none; 
+      display: none;
     }
 
     .tile {
       width: 100%;
       height: 100%;
       background-size: 300px 300px;
-      border: 1px solid #cccccc;
-      cursor: grab;
+      cursor: pointer;
+      border: 1px solid #ccc;
     }
 
     #game-over {
@@ -80,17 +70,10 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      text-align: center;
       padding: 20px;
       background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-      border: 2px solid #4682b4;
       border-radius: 10px;
-    }
-
-    #game-over h1 {
-      color: #4682b4;
-      margin-bottom: 20px;
+      text-align: center;
     }
 
     #restart-btn {
@@ -101,21 +84,15 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    #restart-btn:hover {
-      background-color: #5a9bd6;
-      transform: scale(1.1);
     }
   </style>
 </head>
 <body>
   <div id="level-selector">
     <h2>Select Difficulty Level</h2>
-    <button class="level-btn" data-level="hard">Simple</button>
-    <button class="level-btn" data-level="harder">Average</button>
-    <button class="level-btn" data-level="hardest">Complex</button>
+    <button class="level-btn" data-level="Simple">Simple</button>
+    <button class="level-btn" data-level="Average">Average</button>
+    <button class="level-btn" data-level="Complex">Complex</button>
   </div>
   <div id="game-container"></div>
   <div id="game-over">
@@ -130,106 +107,73 @@
     const restartBtn = document.getElementById("restart-btn");
 
     const images = {
-      hard: [
-         "https://static.vecteezy.com/system/resources/previews/025/774/874/non_2x/spiderman-logo-red-background-free-vector.jpg",
+      Simple: ["https://static.vecteezy.com/system/resources/previews/025/774/874/non_2x/spiderman-logo-red-background-free-vector.jpg",
         "https://i.pinimg.com/originals/db/6a/d3/db6ad35fa10d6669ccaeef4981131697.png",
         "https://i.ebayimg.com/images/g/ZnEAAOSwq4hdioNq/s-l400.jpg",
-
-      ],
-      harder: [
-        "https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/DD54F7FCA01C567510F4581770B3D5BE411E75D7F9DB88602B9A62725A5A74A5/scale?width=1200&aspectRatio=1.78&format=webp",
+],
+      Average: ["https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/DD54F7FCA01C567510F4581770B3D5BE411E75D7F9DB88602B9A62725A5A74A5/scale?width=1200&aspectRatio=1.78&format=webp",
                 "https://i.blogs.es/738268/sv2_stc0085.1046_lm_v1/450_1000.jpeg",
-
-      ],
-      hardest: [
-        "https://wallpapers-clan.com/wp-content/uploads/2024/02/aesthetic-spiderman-logo-desktop-wallpaper-preview.jpg",
+],
+      Complex: ["https://wallpapers-clan.com/wp-content/uploads/2024/02/aesthetic-spiderman-logo-desktop-wallpaper-preview.jpg",
                 "https://upload.wikimedia.org/wikipedia/en/2/21/Web_of_Spider-Man_Vol_1_129-1.png",
                 "https://images5.alphacoders.com/132/1328421.png",
-
-      ],
+]
     };
 
     const gridSize = 3;
     let tiles = [];
-    let shuffledTiles = [];
-    let imageUrl = "";
+    let firstTile = null; // Store the first clicked tile
 
     function initGame(level) {
       levelSelector.style.display = "none";
       gameContainer.style.display = "grid";
-
-      imageUrl = images[level][Math.floor(Math.random() * images[level].length)];
-      tiles = [];
       gameContainer.innerHTML = "";
 
-      for (let row = 0; row < gridSize; row++) {
-        for (let col = 0; col < gridSize; col++) {
-          const tile = document.createElement("div");
-          tile.className = "tile";
-          tile.style.backgroundImage = `url(${imageUrl})`;
-          tile.style.backgroundPosition = `${-col * 100}px ${-row * 100}px`;
-          tile.dataset.correctIndex = row * gridSize + col;
-          tile.dataset.currentIndex = row * gridSize + col;
-          tile.draggable = true;
+      const imageUrl = images[level][Math.floor(Math.random() * images[level].length)];
+      tiles = [];
 
-          tile.addEventListener("dragstart", handleDragStart);
-          tile.addEventListener("dragover", handleDragOver);
-          tile.addEventListener("drop", handleDrop);
+      for (let i = 0; i < gridSize * gridSize; i++) {
+        const tile = document.createElement("div");
+        tile.className = "tile";
+        tile.style.backgroundImage = `url(${imageUrl})`;
+        tile.style.backgroundPosition = `${-(i % gridSize) * 100}px ${-Math.floor(i / gridSize) * 100}px`;
+        tile.dataset.index = i;
 
-          gameContainer.appendChild(tile);
-          tiles.push({ index: row * gridSize + col, element: tile });
-        }
+        tile.addEventListener("click", handleTileClick);
+        tiles.push(tile);
+        gameContainer.appendChild(tile);
       }
 
-      shuffledTiles = [...tiles];
       shuffleTiles();
-      renderTiles();
     }
 
     function shuffleTiles() {
-      for (let i = shuffledTiles.length - 1; i > 0; i--) {
+      for (let i = tiles.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [shuffledTiles[i], shuffledTiles[j]] = [shuffledTiles[j], shuffledTiles[i]];
+        [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
       }
-      shuffledTiles.forEach((tile, index) => {
-        tile.element.dataset.currentIndex = index;
-      });
+      renderTiles();
     }
 
     function renderTiles() {
       gameContainer.innerHTML = "";
-      shuffledTiles.forEach(tile => {
-        gameContainer.appendChild(tile.element);
+      tiles.forEach(tile => {
+        gameContainer.appendChild(tile);
       });
     }
 
-    let draggedTile = null;
+    function handleTileClick(event) {
+      const clickedTile = event.target;
 
-    function handleDragStart(event) {
-      draggedTile = event.target;
-    }
-
-    function handleDragOver(event) {
-      event.preventDefault();
-    }
-
-    function handleDrop(event) {
-      event.preventDefault();
-
-      const targetTile = event.target;
-
-      if (draggedTile && targetTile && draggedTile !== targetTile) {
-        const draggedIndex = shuffledTiles.findIndex(t => t.element === draggedTile);
-        const targetIndex = shuffledTiles.findIndex(t => t.element === targetTile);
-
-        [shuffledTiles[draggedIndex], shuffledTiles[targetIndex]] = [
-          shuffledTiles[targetIndex],
-          shuffledTiles[draggedIndex],
-        ];
-
-        shuffledTiles.forEach((tile, index) => {
-          tile.element.dataset.currentIndex = index;
-        });
+      if (!firstTile) {
+        // Select the first tile
+        firstTile = clickedTile;
+        clickedTile.style.border = "3px solid red"; // Highlight the tile
+      } else {
+        // Swap the first and second tiles
+        swapTiles(firstTile, clickedTile);
+        firstTile.style.border = "1px solid #ccc"; // Remove highlight
+        firstTile = null; // Reset the first tile
 
         renderTiles();
 
@@ -239,8 +183,15 @@
       }
     }
 
+    function swapTiles(tile1, tile2) {
+      const index1 = tiles.indexOf(tile1);
+      const index2 = tiles.indexOf(tile2);
+
+      [tiles[index1], tiles[index2]] = [tiles[index2], tiles[index1]];
+    }
+
     function checkWinCondition() {
-      return shuffledTiles.every(tile => tile.element.dataset.correctIndex === tile.element.dataset.currentIndex);
+      return tiles.every((tile, index) => tile.dataset.index == index);
     }
 
     restartBtn.addEventListener("click", () => {
