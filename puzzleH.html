@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Complete Photo Puzzle</title>
+  <title>Photo Puzzle Game</title>
   <style>
     body {
       display: flex;
@@ -12,7 +12,6 @@
       height: 100vh;
       background-image: url('https://i.postimg.cc/Y9xNt2tq/Screenshot-2024-11-30-184452.png');
       background-size: cover;
-      background-position: center;
       font-family: Arial, sans-serif;
       margin: 0;
       color: #fff;
@@ -26,7 +25,6 @@
       background: rgba(255, 255, 255, 0.9);
       border: 2px solid #4682b4;
       border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
       text-align: center;
     }
 
@@ -44,12 +42,6 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .level-btn:hover {
-      background-color: #5a9bd6;
-      transform: scale(1.1);
     }
 
     #game-container {
@@ -61,17 +53,15 @@
       gap: 2px;
       border: 5px solid #4682b4;
       background-color: rgba(255, 255, 255, 0.8);
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-      display: none; 
+      display: none;
     }
 
     .tile {
       width: 100%;
       height: 100%;
       background-size: 300px 300px;
-      border: 1px solid #cccccc;
-      cursor: grab;
+      cursor: pointer;
+      border: 1px solid #ccc;
     }
 
     #game-over {
@@ -80,17 +70,10 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      text-align: center;
       padding: 20px;
       background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-      border: 2px solid #4682b4;
       border-radius: 10px;
-    }
-
-    #game-over h1 {
-      color: #4682b4;
-      margin-bottom: 20px;
+      text-align: center;
     }
 
     #restart-btn {
@@ -101,12 +84,6 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-
-    #restart-btn:hover {
-      background-color: #5a9bd6;
-      transform: scale(1.1);
     }
   </style>
 </head>
@@ -130,104 +107,74 @@
     const restartBtn = document.getElementById("restart-btn");
 
     const images = {
-      Simple: [
-        "https://rukminim2.flixcart.com/image/850/1000/kkwwu4w0/poster/i/j/i/large-doraemon-cartoon-waterproof-vinyl-sticker-poster-can2490-2-original-imagy5enhzahmevc.jpeg?q=90&crop=false",
+      Simple: ["https://rukminim2.flixcart.com/image/850/1000/kkwwu4w0/poster/i/j/i/large-doraemon-cartoon-waterproof-vinyl-sticker-poster-can2490-2-original-imagy5enhzahmevc.jpeg?q=90&crop=false",
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOrTv215GpByCh4Yk1RWHLHso_dvV7MuscDg&s",
         "https://static.wikia.nocookie.net/alienfilm/images/4/49/Dorami.webp/revision/latest/scale-to-width-down/326?cb=20210211211219",
-      ],
-      Average: [
-                "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/472292a2-8cba-4ccf-8403-ded0c3d6d3ad/daz4wdh-ca16e39c-2dea-48de-8722-7e787ce8872a.png/v1/fill/w_827,h_868,q_80,strp/nobita_and_shizuka_by_kittykun123_daz4wdh-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODY4IiwicGF0aCI6IlwvZlwvNDcyMjkyYTItOGNiYS00Y2NmLTg0MDMtZGVkMGMzZDZkM2FkXC9kYXo0d2RoLWNhMTZlMzljLTJkZWEtNDhkZS04NzIyLTdlNzg3Y2U4ODcyYS5wbmciLCJ3aWR0aCI6Ijw9ODI3In1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.TEVv7GGdLodmsbMO5IiuhCGT-6Hb_B3oKB8UDTju3Z4",
+],
+      Average: ["https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/472292a2-8cba-4ccf-8403-ded0c3d6d3ad/daz4wdh-ca16e39c-2dea-48de-8722-7e787ce8872a.png/v1/fill/w_827,h_868,q_80,strp/nobita_and_shizuka_by_kittykun123_daz4wdh-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODY4IiwicGF0aCI6IlwvZlwvNDcyMjkyYTItOGNiYS00Y2NmLTg0MDMtZGVkMGMzZDZkM2FkXC9kYXo0d2RoLWNhMTZlMzljLTJkZWEtNDhkZS04NzIyLTdlNzg3Y2U4ODcyYS5wbmciLCJ3aWR0aCI6Ijw9ODI3In1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.TEVv7GGdLodmsbMO5IiuhCGT-6Hb_B3oKB8UDTju3Z4",
                 "https://img10.hotstar.com/image/upload/f_auto/sources/r1/cms/prod/7085/1715414277085-i",
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg5gBHYl1YWvyJ6XL0zjvst8ANsRxpXoKmkg&s",
-      ],
-      Complex: [
-                "https://i.pinimg.com/originals/54/7a/7f/547a7f9693b6ab79efcd963d2d760fcf.png",
+],
+      Complex: ["https://i.pinimg.com/originals/54/7a/7f/547a7f9693b6ab79efcd963d2d760fcf.png",
                 "https://m.media-amazon.com/images/M/MV5BNTRjMDA5ZTQtNWVkMy00OTAwLWI2NmMtYjQxYWM4MTIxYWFhXkEyXkFqcGc@._V1_.jpg",
                 "https://i.redd.it/6vcmez2bl2v81.jpg",
-      ],
+]
     };
 
     const gridSize = 3;
     let tiles = [];
-    let shuffledTiles = [];
-    let imageUrl = "";
+    let firstTile = null; // Store the first clicked tile
 
     function initGame(level) {
       levelSelector.style.display = "none";
       gameContainer.style.display = "grid";
-
-      imageUrl = images[level][Math.floor(Math.random() * images[level].length)];
-      tiles = [];
       gameContainer.innerHTML = "";
 
-      for (let row = 0; row < gridSize; row++) {
-        for (let col = 0; col < gridSize; col++) {
-          const tile = document.createElement("div");
-          tile.className = "tile";
-          tile.style.backgroundImage = `url(${imageUrl})`;
-          tile.style.backgroundPosition = `${-col * 100}px ${-row * 100}px`;
-          tile.dataset.correctIndex = row * gridSize + col;
-          tile.dataset.currentIndex = row * gridSize + col;
-          tile.draggable = true;
+      const imageUrl = images[level][Math.floor(Math.random() * images[level].length)];
+      tiles = [];
 
-          tile.addEventListener("dragstart", handleDragStart);
-          tile.addEventListener("dragover", handleDragOver);
-          tile.addEventListener("drop", handleDrop);
+      for (let i = 0; i < gridSize * gridSize; i++) {
+        const tile = document.createElement("div");
+        tile.className = "tile";
+        tile.style.backgroundImage = `url(${imageUrl})`;
+        tile.style.backgroundPosition = `${-(i % gridSize) * 100}px ${-Math.floor(i / gridSize) * 100}px`;
+        tile.dataset.index = i;
 
-          gameContainer.appendChild(tile);
-          tiles.push({ index: row * gridSize + col, element: tile });
-        }
+        tile.addEventListener("click", handleTileClick);
+        tiles.push(tile);
+        gameContainer.appendChild(tile);
       }
 
-      shuffledTiles = [...tiles];
       shuffleTiles();
-      renderTiles();
     }
 
     function shuffleTiles() {
-      for (let i = shuffledTiles.length - 1; i > 0; i--) {
+      for (let i = tiles.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [shuffledTiles[i], shuffledTiles[j]] = [shuffledTiles[j], shuffledTiles[i]];
+        [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
       }
-      shuffledTiles.forEach((tile, index) => {
-        tile.element.dataset.currentIndex = index;
-      });
+      renderTiles();
     }
 
     function renderTiles() {
       gameContainer.innerHTML = "";
-      shuffledTiles.forEach(tile => {
-        gameContainer.appendChild(tile.element);
+      tiles.forEach(tile => {
+        gameContainer.appendChild(tile);
       });
     }
 
-    let draggedTile = null;
+    function handleTileClick(event) {
+      const clickedTile = event.target;
 
-    function handleDragStart(event) {
-      draggedTile = event.target;
-    }
-
-    function handleDragOver(event) {
-      event.preventDefault();
-    }
-
-    function handleDrop(event) {
-      event.preventDefault();
-
-      const targetTile = event.target;
-
-      if (draggedTile && targetTile && draggedTile !== targetTile) {
-        const draggedIndex = shuffledTiles.findIndex(t => t.element === draggedTile);
-        const targetIndex = shuffledTiles.findIndex(t => t.element === targetTile);
-
-        [shuffledTiles[draggedIndex], shuffledTiles[targetIndex]] = [
-          shuffledTiles[targetIndex],
-          shuffledTiles[draggedIndex],
-        ];
-
-        shuffledTiles.forEach((tile, index) => {
-          tile.element.dataset.currentIndex = index;
-        });
+      if (!firstTile) {
+        // Select the first tile
+        firstTile = clickedTile;
+        clickedTile.style.border = "3px solid red"; // Highlight the tile
+      } else {
+        // Swap the first and second tiles
+        swapTiles(firstTile, clickedTile);
+        firstTile.style.border = "1px solid #ccc"; // Remove highlight
+        firstTile = null; // Reset the first tile
 
         renderTiles();
 
@@ -237,8 +184,15 @@
       }
     }
 
+    function swapTiles(tile1, tile2) {
+      const index1 = tiles.indexOf(tile1);
+      const index2 = tiles.indexOf(tile2);
+
+      [tiles[index1], tiles[index2]] = [tiles[index2], tiles[index1]];
+    }
+
     function checkWinCondition() {
-      return shuffledTiles.every(tile => tile.element.dataset.correctIndex === tile.element.dataset.currentIndex);
+      return tiles.every((tile, index) => tile.dataset.index == index);
     }
 
     restartBtn.addEventListener("click", () => {
