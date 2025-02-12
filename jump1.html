@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Finding Game with Stylish Game Over</title>
+  <title>Finding Game with Elegant Design</title>
   <style>
     body {
       display: flex;
@@ -12,29 +12,37 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f0f8ff;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #f1e2d7; /* Soft nude background */
       position: relative;
-      padding: 0;
-      box-sizing: border-box;
       overflow: hidden;
     }
+
+    /* Instructions screen */
     #instructions {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: #ffffff;
+      background: #fff9f1; /* Very light nude */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
       font-size: 5vw;
-      padding: 10px;
+      padding: 20px;
       box-sizing: border-box;
+      opacity: 1;
+      transition: opacity 0.5s ease-out;
     }
+
+    #instructions.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
     .game-board {
       display: none;
       gap: 2vw;
@@ -44,57 +52,92 @@
       max-height: 500px;
       grid-template-columns: repeat(5, 1fr);
       box-sizing: border-box;
+      position: relative;
     }
+
     .object {
       width: 100%;
       aspect-ratio: 1;
-      background-color: #3498db;
-      border-radius: 10px;
+      background-color: #d0a98e; /* Muted brownish nude */
+      border-radius: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      transition: all 0.3s ease-in-out;
     }
+
+    .object:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      background-color: #e3b597; /* Lighter nude when hovered */
+    }
+
     .special {
       background-color: transparent;
       background-image: url('https://i.postimg.cc/mktHFTzb/Screenshot-2025-01-10-201447-removebg-preview.png');
       background-size: cover;
       animation: blink 1s infinite;
     }
+
     @keyframes blink {
       50% { opacity: 0; }
     }
+
     .info, .game-over {
       text-align: center;
       font-size: 4vw;
+      color: #3d2b1f; /* Dark brown text for contrast */
     }
+
     .game-over {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background-color: #e74c3c;
+      background-color: #d24d57; /* Bold contrast color */
       color: white;
       font-size: 5vw;
       padding: 5vw;
-      border-radius: 10px;
+      border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       display: none;
-      animation: fadeIn 1s ease-in-out;
+      animation: fadeInScale 0.5s ease-out;
     }
+
+    @keyframes fadeInScale {
+      0% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
     .game-over button, #start-game {
-      background-color: #3498db;
-      color: white;
+      background-color: #e3b597; /* Lighter nude button */
+      color: #3d2b1f; /* Dark brown text */
       border: none;
       padding: 2vw 4vw;
       font-size: 4vw;
       cursor: pointer;
-      border-radius: 5px;
+      border-radius: 10px;
       margin-top: 3vw;
+      transition: background-color 0.3s ease;
     }
+
     .game-over button:hover, #start-game:hover {
-      background-color: #2980b9;
+      background-color: #d0a98e; /* Muted brownish nude when hovered */
     }
+
+    /* Particles animation */
+    @keyframes particleAnimation {
+      0% { transform: translate(0, 0); opacity: 1; }
+      100% { transform: translate(50px, 50px); opacity: 0; }
+    }
+
   </style>
 </head>
 <body>
@@ -132,10 +175,13 @@
     let timer;
 
     startGameButton.addEventListener('click', () => {
-      instructions.style.display = 'none';
-      board.style.display = 'grid';
-      createBoard();
-      startFailureTimer();
+      instructions.classList.add('hidden');
+      setTimeout(() => {
+        instructions.style.display = 'none';
+        board.style.display = 'grid';
+        createBoard();
+        startFailureTimer();
+      }, 500); // Matches the fade-out transition time
     });
 
     function createBoard() {
@@ -161,6 +207,11 @@
         e.target.classList.remove('special');
         score++;
         scoreDisplay.textContent = score;
+
+        // Add particle effects when scoring
+        const rect = e.target.getBoundingClientRect();
+        addParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+
         if (board.querySelectorAll('.special').length === 0) {
           checkLevelUp();
           createBoard();
@@ -202,6 +253,31 @@
       levelDisplay.textContent = level;
       gameOverDisplay.style.display = 'none';
       instructions.style.display = 'flex';
+      instructions.classList.remove('hidden');
+    }
+
+    function addParticles(x, y) {
+      const particleContainer = document.createElement('div');
+      particleContainer.style.position = 'absolute';
+      particleContainer.style.left = `${x}px`;
+      particleContainer.style.top = `${y}px`;
+      particleContainer.style.pointerEvents = 'none';
+      document.body.appendChild(particleContainer);
+
+      for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.width = '10px';
+        particle.style.height = '10px';
+        particle.style.borderRadius = '50%';
+        particle.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        particle.style.animation = `particleAnimation ${Math.random() * 1 + 0.5}s linear infinite`;
+        particle.style.left = `${Math.random() * 20}px`;
+        particle.style.top = `${Math.random() * 20}px`;
+        particleContainer.appendChild(particle);
+      }
+
+      setTimeout(() => particleContainer.remove(), 1000);
     }
   </script>
 </body>
