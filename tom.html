@@ -152,8 +152,6 @@ const instructionsScreen = document.getElementById('instructions');
 
     const bowImg = new Image();
     bowImg.src = 'https://i.postimg.cc/tTV02Ytm/Screenshot-2024-11-29-182053-removebg-preview.png';
-
-    // Mobile touch controls
     canvas.addEventListener('touchstart', handleTouchStart);
     canvas.addEventListener('touchend', handleTouchEnd);
 
@@ -180,21 +178,16 @@ const instructionsScreen = document.getElementById('instructions');
     canvas.addEventListener('mouseup', () => {
       direction = null;
     });
-
-    
     document.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') direction = 'left';
       if (e.key === 'ArrowRight') direction = 'right';
     });
-
     document.addEventListener('keyup', (e) => {
       if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') direction = null;
     });
-
     function drawSnake() {
       snake.forEach(part => ctx.drawImage(helloKittyImg, part.x, part.y, part.width, part.height));
     }
-
     function updateSnakePosition() {
       if (direction) {
         let head = { ...snake[0] };
@@ -212,7 +205,6 @@ const instructionsScreen = document.getElementById('instructions');
       let width = 50, height = 50, x = Math.random() * (canvas.width - width);
       obstacles.push({ x, y: -height, width, height });
     }
-
     function drawObstacles() {
       obstacles.forEach(obstacle => {
         ctx.drawImage(bowImg, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
@@ -269,4 +261,5 @@ const instructionsScreen = document.getElementById('instructions');
   </script>
 </body>
 </html>
+
 
