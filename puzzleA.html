@@ -123,7 +123,7 @@
 
     const gridSize = 3;
     let tiles = [];
-    let firstTile = null; // Store the first clicked tile
+    let firstTile = null;
 
     function initGame(level) {
       levelSelector.style.display = "none";
@@ -169,12 +169,12 @@
       if (!firstTile) {
         // Select the first tile
         firstTile = clickedTile;
-        clickedTile.style.border = "3px solid red"; // Highlight the tile
+        clickedTile.style.border = "3px solid red";
       } else {
         // Swap the first and second tiles
         swapTiles(firstTile, clickedTile);
-        firstTile.style.border = "1px solid #ccc"; // Remove highlight
-        firstTile = null; // Reset the first tile
+        firstTile.style.border = "1px solid #ccc"; 
+        firstTile = null;
 
         renderTiles();
 
@@ -209,3 +209,4 @@
   </script>
 </body>
 </html>
+
